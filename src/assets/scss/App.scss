@@ -13,14 +13,22 @@ $itemsNum: 5;
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+.menu__wrapper{
+  display: flex;
+  // align-items: center;
+  // justify-content: center;
+  width: 280px;
+  height: 280px;
+  overflow: hidden;
+}
 .menu{
   position: relative;
   z-index: 1;
+  margin: auto;
   width: 240px;
   height: 240px;
   font-size: 0;
-  outline: 1px solid red;
+  border: 1px solid red;
 
   ul{
     position: absolute;
@@ -59,6 +67,9 @@ $itemsNum: 5;
       opacity: 1;
       transition: opacity 0s $timeTrans;
     }
+  }
+  &.activated{
+
   }
 }
 .menu__toggler{
@@ -99,6 +110,17 @@ $itemsNum: 5;
   left: 0;
   margin: auto;
   pointer-events: none;
+
+  &.active{
+    z-index: 1;
+
+    .icon_circle{
+      animation: circle_activated 2*$timeTrans forwards;
+    }
+    .wrapper_animated{
+      animation: icon_activated 2*$timeTrans forwards;
+    }
+  }
 
   $itemAngle: (360 / $itemsNum);
   $totalAngle: 0;
@@ -193,44 +215,21 @@ $itemsNum: 5;
 }
 
 .icon_circle{
-  stroke-dashoffset: 628px;
   transform: rotate(-90deg);
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
   margin: auto;
+  stroke-dashoffset: 628px;
+}
+.wrapper_animated{
+  transform: rotate(0deg);
 }
 
 .circle__wrapper{
   opacity: 0;
   position: absolute;
-  // $itemAngle: (360 / $itemsNum);
-  // $totalAngle: 0;
-
-  // @for $i from 1 through $itemsNum {
-  //   &:nth-child(#{$i}){
-  //     transform: rotate($totalAngle * 1deg)
-  //   }
-
-  //   $totalAngle: $totalAngle + $itemAngle;
-  // }
-
-  // &.home{
-  //   color: #1E88E5;
-  // }
-  // &.search{
-  //   color: #00c853;
-  // }
-  // &.notification{
-  //   color: #f4511e;
-  // }
-  // &.settings{
-  //   color: #5e35b1;
-  // }
-  // &.location{
-  //   color: #fb8c00;
-  // }
 }
 
 .icon_item{
@@ -282,6 +281,45 @@ $itemsNum: 5;
     100%{
       opacity: 1;
       transform: rotate(0);
+    }
+  }
+  @keyframes circle_activated{
+    0%{
+      stroke-dashoffset: 628.31853px;
+      stroke-width: 40px;
+      opacity: 1;
+      transform: rotate(-90deg) scale(1);
+    }
+    50%{
+      stroke-dashoffset: 0px;
+      stroke-width: 40px;
+      opacity: 1;
+      transform: rotate(-90deg) scale(1);
+      
+    }
+    100%{
+      stroke-dashoffset: 0px;
+      stroke-width: 45px;
+      opacity: 0;
+      transform: rotate(-90deg) scale(1.15);
+    }
+  }
+  @keyframes icon_activated{
+    0%{
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+    50%{
+      opacity: 1;
+      transform: rotate(360deg);
+    }
+    60%{
+      opacity: 0;
+      transform: rotate(360deg);
+    }
+    100%{
+      opacity: 0;
+      transform: rotate(360deg);
     }
   }
 }

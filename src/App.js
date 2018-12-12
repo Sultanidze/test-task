@@ -17,8 +17,7 @@ class App extends Component {
     }
 
     // like jQuery parent
-    Element.prototype.parent = function(selector) {
-      var parent;
+    Element.prototype.customParent = function(selector) {
       var elem = this;
       var ishaveselector = selector !== undefined;
      
@@ -28,24 +27,40 @@ class App extends Component {
         }
      
         if (!ishaveselector || elem.matches(selector)) {
-          return parent;
+          return elem;
         }
       }
     };
 
-    const iconWrapperNodes = document.querySelectorAll('.icon__wrapper');
-    iconWrapperNodes.forEach( item => item.addEventListener('click', function(e) {
-      console.log(this);
-    }))
-
     const menuNode = document.querySelector('.menu');
+    const menuToggleNode = menuNode.querySelector('.menu__toggler');
+    const iconWrapperNodes = menuNode.querySelectorAll('.icon__wrapper');
+    const menuItemNodes = menuNode.querySelectorAll('.menu__item');
+
+    const itemClickHandler = function(e) {
+      const menuItem = this.customParent('.menu__item')
+      console.log(menuItem)
+      menuItemNodes.forEach( item => item.classList.remove('active'))
+      menuNode.classList.add('animated')
+      menuItem.classList.add('active')
+      const circleNode = menuItem.querySelector('.icon_circle')
+      
+      const animationCallback = function cb(){
+        menuNode.classList.remove('animated')
+        menuItem.classList.remove('active')
+        circleNode.removeEventListener("animationend", animationCallback)
+      }
+      circleNode.addEventListener("animationend", animationCallback)
+    }
+    iconWrapperNodes.forEach( item => item.addEventListener('click', itemClickHandler))
+
     const toggleMenuHandler = function(e) {
       if (menuNode.classList.toggle('opened')) {
-
-      } 
-      console.log('toggleMenu')
+        console.log("added 'opened'")
+      } else {
+        console.log("removed 'opened'")
+      }
     }
-    const menuToggleNode = document.querySelector('.menu__toggler');
     menuToggleNode.addEventListener('click', toggleMenuHandler)
   }
   render() {
@@ -62,10 +77,12 @@ class App extends Component {
                 <div className="circle__wrapper wrapper_rotate">
                   <Circle className="icon_circle" />
                 </div>
-                <div className="wrapper_rotate">
-                  <div className="wrapper_translate">
-                    <div className="icon__wrapper">
-                      <HomeIcon className="icon_item" alt="home" />
+                <div className="wrapper_animated">
+                  <div className="wrapper_rotate">
+                    <div className="wrapper_translate">
+                      <div className="icon__wrapper">
+                        <HomeIcon className="icon_item" alt="home" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -74,10 +91,12 @@ class App extends Component {
                 <div className="circle__wrapper wrapper_rotate">
                   <Circle className="icon_circle" />
                 </div>
-                <div className="wrapper_rotate">
-                  <div className="wrapper_translate">
-                    <div className="icon__wrapper">
-                      <SearchIcon className="icon_item" alt="search" />
+                <div className="wrapper_animated">
+                  <div className="wrapper_rotate">
+                    <div className="wrapper_translate">
+                      <div className="icon__wrapper">
+                        <SearchIcon className="icon_item" alt="search" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -86,10 +105,12 @@ class App extends Component {
                 <div className="circle__wrapper wrapper_rotate">
                   <Circle className="icon_circle" />
                 </div>
-                <div className="wrapper_rotate">
-                  <div className="wrapper_translate">
-                    <div className="icon__wrapper">
-                      <NotificationIcon className="icon_item" alt="notification" />
+                <div className="wrapper_animated">
+                  <div className="wrapper_rotate">
+                    <div className="wrapper_translate">
+                      <div className="icon__wrapper">
+                        <NotificationIcon className="icon_item" alt="notification" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -98,10 +119,12 @@ class App extends Component {
                 <div className="circle__wrapper wrapper_rotate">
                   <Circle className="icon_circle" />
                 </div>
-                <div className="wrapper_rotate">
-                  <div className="wrapper_translate">
-                    <div className="icon__wrapper">
-                      <SettingsIcon className="icon_item" alt="settings" />
+                <div className="wrapper_animated">
+                  <div className="wrapper_rotate">
+                    <div className="wrapper_translate">
+                      <div className="icon__wrapper">
+                        <SettingsIcon className="icon_item" alt="settings" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -110,10 +133,12 @@ class App extends Component {
                 <div className="circle__wrapper wrapper_rotate">
                   <Circle className="icon_circle" />
                 </div>
-                <div className="wrapper_rotate">
-                  <div className="wrapper_translate">
-                    <div className="icon__wrapper">
-                      <LocationIcon className="icon_item" alt="location" />
+                <div className="wrapper_animated">
+                  <div className="wrapper_rotate">
+                    <div className="wrapper_translate">
+                      <div className="icon__wrapper">
+                        <LocationIcon className="icon_item" alt="location" />
+                      </div>
                     </div>
                   </div>
                 </div>
