@@ -1,7 +1,7 @@
-@import "mixins"; 
+// @import "mixins";
 
-$time_trans: 300ms;
-$items_num: 5;
+$timeTrans: 300ms;
+$itemsNum: 5;
 
 .App {
   background-color: #282c34;
@@ -15,101 +15,273 @@ $items_num: 5;
 }
 
 .menu{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  // line-height: 40px;
+  position: relative;
+  z-index: 1;
+  width: 240px;
+  height: 240px;
+  font-size: 0;
+  outline: 1px solid red;
 
-  &__wrapper{
-    position: relative;
-    z-index: 1;
-    width: 240px;
-    height: 240px;
-  }
-
-  &__item{
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    margin: auto;
+  ul{
     position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-
-    &_home{
-      background-color: #1E88E5;
-    }
-    &_search{
-      background-color: #00c853;
-    }
-    &_notification{
-      background-color: #f4511e;
-    }
-    &_settings{
-      background-color: #5e35b1;
-    }
-    &_location{
-      background-color: #fb8c00;
-    }
-  }
-
-  &__toggle{
-    z-index: 1;
-    background-color: rgba(#E0E0E0, 1);
-    transition:  transform ease $time_trans;
-  }
-
-  &__list{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    border-radius: 50%;
-    width: 220px;
-    height: 220px;
-    padding: 0;
-    color: #fff;
     list-style: none;
+    top: 0;
+    left: 0;
+    margin: auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
   }
 
-  &.active{
-    .menu__toggle{
+  &.opened{
+    .menu__toggler{
       background-color: rgba(#E0E0E0, 0.5);
     }
     .icon_close{
+      animation: close__icon_menu-open $timeTrans;
       opacity: 1;
     }
-    .icon_open{
+    .icon_burger{
+      animation: burger__icon_menu-open $timeTrans;
       opacity: 0;
+    }
+
+    .icon__wrapper{
+      transform: scale(1);
+      transition: transform $timeTrans;
+    }
+    
+    .wrapper_translate{
+      transform: translateY(-100px);
+    }
+    .circle__wrapper{
+      opacity: 1;
+      transition: opacity 0s $timeTrans;
+    }
+  }
+}
+.menu__toggler{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  z-index: 1;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:  transform ease $timeTrans;
+  z-index: 1;
+  background-color: rgba(#E0E0E0, 1);
+  color: #282c34;
+  transition: background-color ease $timeTrans, transform ease $timeTrans;
+
+  svg{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+}
+.menu__item{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  pointer-events: none;
+
+  $itemAngle: (360 / $itemsNum);
+  $totalAngle: 0;
+
+  @for $i from 1 through $itemsNum {
+    &:nth-child(#{$i}){
+      .wrapper_rotate{
+        transform: rotate($totalAngle * 1deg);
+      }
+      .icon_item{
+        transform: rotate(-$totalAngle * 1deg);
+      }
+    }
+
+    $totalAngle: $totalAngle + $itemAngle;
+  }
+
+  .wrapper_rotate, .wrapper_translate{
+    width: 240px;
+    height: 240px;
+    pointer-events: none;
+  }
+  .wrapper_translate{
+    transform: translateY(0);
+    transition:  transform ease $timeTrans;
+  }
+
+  .icon__wrapper{
+    transform: scale(0);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+  }
+
+  &.home{
+    $color: #1E88E5;
+    .circle__wrapper{
+      color: $color;
+    }
+    .icon__wrapper{
+      background-color: $color;
+    }
+  }
+  &.search{
+    $color: #00c853;
+    .circle__wrapper{
+      color: $color;
+    }
+    .icon__wrapper{
+      background-color: $color;
+    }
+  }
+  &.notification{
+    $color: #f4511e;
+    .circle__wrapper{
+      color: $color;
+    }
+    .icon__wrapper{
+      background-color: $color;
+    }
+  }
+  &.settings{
+    $color: #5e35b1;
+    .circle__wrapper{
+      color: $color;
+    }
+    .icon__wrapper{
+      background-color: $color;
+    }
+  }
+  &.location{
+    $color: #fb8c00;
+    .circle__wrapper{
+      color: $color;
+    }
+    .icon__wrapper{
+      background-color: $color;
     }
   }
 }
 
-.icon{
-  &_item{
-    fill: currentColor;
-  }
-  &_menu{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-  }
-  &_open{
+.list_menu{
+  color: #fff;
+}
 
+.icon_circle{
+  stroke-dashoffset: 628px;
+  transform: rotate(-90deg);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
+
+.circle__wrapper{
+  opacity: 0;
+  position: absolute;
+  // $itemAngle: (360 / $itemsNum);
+  // $totalAngle: 0;
+
+  // @for $i from 1 through $itemsNum {
+  //   &:nth-child(#{$i}){
+  //     transform: rotate($totalAngle * 1deg)
+  //   }
+
+  //   $totalAngle: $totalAngle + $itemAngle;
+  // }
+
+  // &.home{
+  //   color: #1E88E5;
+  // }
+  // &.search{
+  //   color: #00c853;
+  // }
+  // &.notification{
+  //   color: #f4511e;
+  // }
+  // &.settings{
+  //   color: #5e35b1;
+  // }
+  // &.location{
+  //   color: #fb8c00;
+  // }
+}
+
+.icon_item{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  fill: currentColor;
+}
+
+.icon_burger{
+
+}
+.icon_close{
+  opacity: 0;
+}
+
+@at-root{
+  @keyframes burger__icon_menu-open {
+    0%{
+      opacity: 1;
+      transform: rotate(0);
+      
+    }
+    50%{
+      opacity: 0;
+      transform: rotate(20deg);
+    }
   }
-  &_close{
-    opacity: 0;
+  @keyframes close__icon_menu-open {
+    0%{
+      opacity: 0;
+      transform: rotate(-180deg);
+      
+    }
+    100%{
+      opacity: 1;
+      transform: rotate(0);
+    }
+  }
+  @keyframes circle_menu-open {
+    0%{
+      opacity: 0;
+      transform: rotate(-180deg);
+      
+    }
+    100%{
+      opacity: 1;
+      transform: rotate(0);
+    }
   }
 }
