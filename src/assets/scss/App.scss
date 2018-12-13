@@ -123,6 +123,10 @@ $itemsNum: 5;
 
     .icon_circle{
       animation: circle_activated 2*$timeTrans;
+
+      circle{
+        animation: circle__inner_activated 2*$timeTrans;
+      }
     }
     .wrapper_animated{
       animation: icon_activated 2*$timeTrans;
@@ -230,6 +234,7 @@ $itemsNum: 5;
   left: 0;
   margin: auto;
   stroke-dashoffset: 628px;
+  overflow: visible;
 }
 .wrapper_animated{
   transform: rotate(0deg);
@@ -308,22 +313,33 @@ $itemsNum: 5;
   @keyframes circle_activated{
     0%{
       stroke-dashoffset: 628.31853px;
-      stroke-width: 40px;
+      stroke-width: 80px;
       opacity: 1;
       transform: rotate(-90deg) scale(1);
     }
     50%{
       stroke-dashoffset: 0px;
-      stroke-width: 40px;
+      stroke-width: 80px;
       opacity: 1;
       transform: rotate(-90deg) scale(1);
       
     }
     100%{
       stroke-dashoffset: 0px;
-      stroke-width: 45px;
+      stroke-width: 298px;
       opacity: 0;
       transform: rotate(-90deg) scale(1.15);
+    }
+  }
+  @keyframes circle__inner_activated{
+    0%{
+      stroke-width: 42px;
+    }
+    50%{
+      stroke-width: 42px;
+    }
+    100%{
+      stroke-width: 48px;
     }
   }
   @keyframes icon_activated{

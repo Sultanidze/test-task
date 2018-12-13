@@ -9,12 +9,13 @@ import {ReactComponent as LocationIcon}  from './assets/icons/location.svg';
 import {ReactComponent as Circle}  from './assets/icons/circle.svg';
 import './assets/scss/App.scss';
 
+// https://github.com/Ramotion/circle-menu replica
 class App extends Component {
   componentDidMount(){
     // IE11 forEach polyfill
-    if (window.NodeList && !NodeList.prototype.forEach) {
-      NodeList.prototype.forEach = Array.prototype.forEach;
-    }
+    // if (window.NodeList && !NodeList.prototype.forEach) {
+    //   NodeList.prototype.forEach = Array.prototype.forEach;
+    // }
 
     // like jQuery parent
     Element.prototype.customParent = function(selector) {
