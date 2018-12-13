@@ -30,64 +30,72 @@ class App extends Component {
           return elem;
         }
       }
-    };
+    }
 
     const menuNode = document.querySelector('.menu');
     const menuToggleNode = menuNode.querySelector('.menu__toggler');
     const iconWrapperNodes = menuNode.querySelectorAll('.icon__wrapper');
     const menuItemNodes = menuNode.querySelectorAll('.menu__item');
 
-    const itemClickHandler = function(e) {
-      const menuItem = this.customParent('.menu__item')
-      console.log(menuItem)
-      menuItemNodes.forEach( item => item.classList.remove('active'))
-      menuNode.classList.add('animated')
-      menuItem.classList.add('active')
-      const circleNode = menuItem.querySelector('.icon_circle')
-      
-      const animationCallback = function(){
-        menuNode.classList.remove('animated')
-        menuItem.classList.remove('active')
-        circleNode.removeEventListener("animationend", animationCallback)
-        console.log("circle animationend");
-      }
-      circleNode.addEventListener("animationend", animationCallback)
-    }
-    iconWrapperNodes.forEach( item => item.addEventListener('click', itemClickHandler))
-
-    const togglerAnimationEndHandler = function(e){
-      menuToggleNode.classList.remove('closing');
-      console.log("togglerAnimationEndHandler")
-      
-      menuToggleNode.removeEventListener('animationend', togglerAnimationEndHandler);
-    }
     const togglerTransitionendEndHandler = function(e){
       if (e.target !== menuToggleNode) return;
-      console.log("togglerTransitionendEndHandler")
-      menuNode.classList.remove('closing', 'opened');
-      // menuNode.classList.add('closed');
+      menuToggleNode.classList.remove('disabled', 'state_close');
+      menuToggleNode.classList.add('enabled', 'state_open');
       menuToggleNode.removeEventListener('transitionend', togglerTransitionendEndHandler);
     }
     const toggleMenuHandler = function(e) {
+      if (menuToggleNode.classList.contains('disabled') || menuNode.classList.contains('animated')) return;
       if (menuNode.classList.contains('opened')) {
-        // menuNode.classList.remove('closing', 'opened'); // temp, without animation
+        menuToggleNode.classList.remove('enabled');
+        menuToggleNode.classList.add('disabled');
+        menuNode.classList.remove('opened');
         menuToggleNode.addEventListener('transitionend', togglerTransitionendEndHandler);
-        menuToggleNode.addEventListener('animationend', togglerAnimationEndHandler);
-        menuToggleNode.classList.add('closing');
       } else {
+        menuNode.classList.remove('closed');
         menuNode.classList.add('opened');
-        console.log("added 'opened'")
-        // console.log("removed 'opened'")
+        menuToggleNode.classList.remove('state_open');
+        menuToggleNode.classList.add('state_close');
       }
     }
     menuToggleNode.addEventListener('click', toggleMenuHandler)
+
+    const itemClickHandler = function(e) {
+      if (menuNode.classList.contains('animated')) return;
+      menuNode.classList.add('animated')
+      menuToggleNode.classList.remove('enabled');
+      menuToggleNode.classList.add('disabled');
+
+      const hideUnactive = function(){
+        menuToggleNode.classList.remove('disabled', 'state_close');
+        menuToggleNode.classList.add('enabled', 'state_open');
+        menuNode.classList.add('animated_end')
+        menuToggleNode.removeEventListener('transitionend', hideUnactive);
+      }
+      menuToggleNode.addEventListener('transitionend', hideUnactive);
+
+      menuItemNodes.forEach( item => item.classList.remove('active'))
+
+      const menuItem = this.customParent('.menu__item')
+      menuItem.classList.add('active')
+
+      const circleNode = menuItem.querySelector('.icon_circle')
+      const circleAnimEndHandler = function(){
+        menuNode.classList.add('closed')
+        menuNode.classList.remove('opened')
+        menuItem.classList.remove('active')
+        menuNode.classList.remove('animated', 'animated_end')
+        circleNode.removeEventListener('animationend', circleAnimEndHandler)
+      }
+      circleNode.addEventListener('animationend', circleAnimEndHandler)
+    }
+    iconWrapperNodes.forEach( item => item.addEventListener('click', itemClickHandler))
   }
   render() {
     return (
       <div className="App">
         <div className="menu__wrapper">
           <nav className="menu">
-            <div className="menu__toggler">
+            <div className="menu__toggler enabled state_open">
                 <MenuIcon className="icon_item icon_burger" alt="menu" />
                 <CloseIcon className="icon_item icon_close" alt="close" />
             </div>
