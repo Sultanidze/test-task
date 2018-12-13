@@ -44,7 +44,16 @@ $itemsNum: 5;
 
   &.opened{
     .menu__toggler{
+      transform: scale(1);
       background-color: rgba(#E0E0E0, 0.5);
+
+      &.closing{
+        transform: scale(0);
+        
+        .icon_burger{
+          animation: burger__icon_menu-close 2*$timeTrans forwards;
+        }
+      }
     }
     .icon_close{
       animation: close__icon_menu-open $timeTrans;
@@ -57,7 +66,7 @@ $itemsNum: 5;
 
     .icon__wrapper{
       transform: scale(1);
-      transition: transform $timeTrans;
+      // transition: transform $timeTrans;
     }
     
     .wrapper_translate{
@@ -80,27 +89,16 @@ $itemsNum: 5;
   left: 0;
   margin: auto;
   z-index: 1;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
-  transition:  transform ease $timeTrans;
   z-index: 1;
   background-color: rgba(#E0E0E0, 1);
   color: #282c34;
-  transition: background-color ease $timeTrans, transform ease $timeTrans;
-
-  svg{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-  }
+  // transform: scale(0);
+  transition: background-color $timeTrans, transform $timeTrans;
+  // transform: scale(1);
 }
 .menu__item{
   position: absolute;
@@ -161,6 +159,7 @@ $itemsNum: 5;
     border-radius: 50%;
     cursor: pointer;
     pointer-events: all;
+    transition:  transform $timeTrans;
   }
 
   &.home{
@@ -250,6 +249,16 @@ $itemsNum: 5;
 }
 
 @at-root{
+  @keyframes toggler_menu-close {
+    0%{
+      opacity: 1;
+      transform: scale(1);
+    }
+    100%{
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
   @keyframes burger__icon_menu-open {
     0%{
       opacity: 1;
@@ -272,11 +281,18 @@ $itemsNum: 5;
       transform: rotate(0);
     }
   }
-  @keyframes circle_menu-open {
+  @keyframes burger__icon_menu-close {
     0%{
       opacity: 0;
-      transform: rotate(-180deg);
-      
+      transform: rotate(-45deg);
+    }
+    50%{
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+    75%{
+      opacity: 0.5;
+      transform: rotate(15deg);
     }
     100%{
       opacity: 1;

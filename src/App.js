@@ -45,20 +45,39 @@ class App extends Component {
       menuItem.classList.add('active')
       const circleNode = menuItem.querySelector('.icon_circle')
       
-      const animationCallback = function cb(){
+      const animationCallback = function(){
         menuNode.classList.remove('animated')
         menuItem.classList.remove('active')
         circleNode.removeEventListener("animationend", animationCallback)
+        console.log("circle animationend");
       }
       circleNode.addEventListener("animationend", animationCallback)
     }
     iconWrapperNodes.forEach( item => item.addEventListener('click', itemClickHandler))
 
+    const togglerAnimationEndHandler = function(e){
+      menuToggleNode.classList.remove('closing');
+      console.log("togglerAnimationEndHandler")
+      
+      menuToggleNode.removeEventListener('animationend', togglerAnimationEndHandler);
+    }
+    const togglerTransitionendEndHandler = function(e){
+      if (e.target !== menuToggleNode) return;
+      console.log("togglerTransitionendEndHandler")
+      menuNode.classList.remove('closing', 'opened');
+      // menuNode.classList.add('closed');
+      menuToggleNode.removeEventListener('transitionend', togglerTransitionendEndHandler);
+    }
     const toggleMenuHandler = function(e) {
-      if (menuNode.classList.toggle('opened')) {
-        console.log("added 'opened'")
+      if (menuNode.classList.contains('opened')) {
+        // menuNode.classList.remove('closing', 'opened'); // temp, without animation
+        menuToggleNode.addEventListener('transitionend', togglerTransitionendEndHandler);
+        menuToggleNode.addEventListener('animationend', togglerAnimationEndHandler);
+        menuToggleNode.classList.add('closing');
       } else {
-        console.log("removed 'opened'")
+        menuNode.classList.add('opened');
+        console.log("added 'opened'")
+        // console.log("removed 'opened'")
       }
     }
     menuToggleNode.addEventListener('click', toggleMenuHandler)
